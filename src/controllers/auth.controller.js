@@ -1,4 +1,5 @@
 const User = require('../models/User');
+const Address  = require('../models/Address');
 const jwt = require('jsonwebtoken');
 
 exports.signUp = async (req, res) => {
@@ -32,10 +33,19 @@ exports.logIn = async (req, res) => {
     expiresIn: 60000
   })
 
+
   return res.json({
     _id: existsUser._id,
     name: existsUser._id,
+    Address: existsUser.Address,
     message: 'Success',
     token: token
   })
+
+}
+
+exports.find = async (req, res) =>{
+  const user = await User.findOne({include:{model:Address}})
+  return res.status(200).json(user)
+  
 }

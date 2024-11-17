@@ -1,5 +1,6 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database.js');
+const User = require('./User.js');
 
 const Address = db.define('address', {
   id: {
@@ -7,6 +8,9 @@ const Address = db.define('address', {
     primaryKey: true,
     autoIncrement: true,
     allowNull: false
+  },
+  userId: {
+    type: Sequelize.INTEGER.UNSIGNED,
   },
   rua: {
     type: Sequelize.STRING,
@@ -27,11 +31,7 @@ const Address = db.define('address', {
 });
 
 Address.sync({force: false});
-/*
-Address.associate = (models) => {
-  Address.belongsTo(models.User, {
-    foreignKey: 'user_id', as: 'users'
-  })
-}
-*/
+
+
+
 module.exports = Address;

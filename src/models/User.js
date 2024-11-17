@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database.js');
 const bcrypt = require('bcryptjs');
+const Address = require('./Address.js');
 
 const User = db.define('user', {
   id: {
@@ -34,11 +35,9 @@ User.comparePWD = async(password, receivedPassword) => {
   return await bcrypt.compare(password, receivedPassword)
 };
 
-/*
-User.associate = (models) => {
-  User.hasOne(models.Address, {
-    foreignKey: 'user_id', as: 'address'
-  })
-}
-*/
+User.hasOne(Address, {
+  foreignKey: 'userId',
+})
+Address.belongsTo(User)
+
 module.exports = User;
