@@ -34,4 +34,11 @@ User.comparePWD = async(password, receivedPassword) => {
   return await bcrypt.compare(password, receivedPassword)
 };
 
+/*
+User.associate = (models) => {
+  User.hasOne(models.Address, {
+    foreignKey: 'user_id', as: 'address'
+  })
+}
+*/
 module.exports = User;

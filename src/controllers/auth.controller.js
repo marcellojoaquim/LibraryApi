@@ -9,7 +9,7 @@ exports.signUp = async (req, res) => {
   const savedUser = await newUser.save();
 
   const newToken = jwt.sign({id: savedUser._id}, 'secretKey', {
-    expiresIn: 3000
+    expiresIn: 60000
   })
 
   res.status(200).json({newToken})
@@ -29,7 +29,7 @@ exports.logIn = async (req, res) => {
   console.log(existsUser);
 
   const token = jwt.sign({id: existsUser._id}, 'secretKey', {
-    expiresIn: 3000
+    expiresIn: 60000
   })
 
   return res.json({
