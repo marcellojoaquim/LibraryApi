@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database.js');
-const User = require('./User.js');
 
-const Address = db.define('address', {
+
+const Address = db.define('addresses', {
   id: {
     type: Sequelize.INTEGER.UNSIGNED,
     primaryKey: true,

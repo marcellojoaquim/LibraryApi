@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const Address  = require('../models/Address');
+const LoansBook = require('../models/LoansBook')
 const { where } = require('sequelize');
 
 exports.find = async (req, res) =>{

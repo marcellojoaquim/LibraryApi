@@ -1,5 +1,7 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database.js');
+const LoansBook = require('./LoansBook.js');
+
 
 const Book = db.define('books', {
   id: {
@@ -23,10 +25,17 @@ const Book = db.define('books', {
   anoPublicacao: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  count: {
+    type: Sequelize.INTEGER,
+    allowNull: true
   }
-
 });
 
-Book.sync({force: false});
+Book.sync({ force: false });
 
+Book.hasMany(LoansBook, {
+    foreignKey: 'bookId', 
+});
+LoansBook.belongsTo(Book);
 module.exports = Book;

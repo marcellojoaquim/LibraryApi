@@ -1,0 +1,1 @@
+const LoansBook = require('../models/LoansBook')
