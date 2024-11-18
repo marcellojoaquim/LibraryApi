@@ -25,10 +25,4 @@ const LoansBook = db.define('loansBooks', {
     }
 })
 
-LoansBook.sync({ force: false});
-
-
-
-
-
 module.exports = LoansBook;

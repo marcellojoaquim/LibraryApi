@@ -32,8 +32,6 @@ const Book = db.define('books', {
   }
 });
 
-Book.sync({ force: false });
-
 Book.hasMany(LoansBook, {
     foreignKey: 'bookId', 
 });

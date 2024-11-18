@@ -26,8 +26,6 @@ const User = db.define('users', {
   }
 });
 
-User.sync({ force: false});
-
 User.encryptPWD = async (password) => {
   const salt = await bcrypt.genSalt(10);
   return await bcrypt.hash(password, salt);

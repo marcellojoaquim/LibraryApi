@@ -3,16 +3,29 @@ const sequelize= require('sequelize');
 const authRoute = require('./routes/auth.routes');
 const userRoute = require('./routes/user.routes');
 const bookRoute = require('./routes/book.routes');
-const db = require('./config/database')
+const db = require('./config/database');
+const Address = require('./models/Address');
+const Book = require('./models/Book');
+const User = require('./models/User');
+const LoansBook = require('./models/LoansBook');
 const port = 3000;
 
 const app = express();
 
-db.authenticate().then(()=>{
-  console.log('conexao com sucesso')
-}).catch((err)=>{
-  console.log(err)
-})
+(async () => {
+  db.authenticate().then(()=>{
+    console.log('conexao com sucesso')
+  }).catch((err)=>{
+    console.log(err)
+  })
+})();
+
+(async () => {
+  await User.sync();
+  await Book.sync();
+  await Address.sync();
+  await LoansBook.sync();
+})();
 
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));

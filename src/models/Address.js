@@ -30,8 +30,4 @@ const Address = db.define('addresses', {
   }
 });
 
-Address.sync({force: false});
-
-
-
 module.exports = Address;
