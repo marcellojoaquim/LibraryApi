@@ -1,33 +1,39 @@
 const Sequelize = require('sequelize');
 const db = require('../config/database.js');
+const LoansBook = require('./LoansBook.js');
 
 
-const Address = db.define('addresses', {
+const Book = db.define('books', {
   id: {
     type: Sequelize.INTEGER.UNSIGNED,
     primaryKey: true,
     autoIncrement: true,
     allowNull: false
   },
-  userId: {
-    type: Sequelize.INTEGER.UNSIGNED,
-  },
-  rua: {
+  titulo: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  numero: {
+  autor: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  bairro: {
+  genero: {
     type: Sequelize.STRING,
     allowNull: false
   },
-  cidade: {
+  anoPublicacao: {
     type: Sequelize.STRING,
     allowNull: false
+  },
+  count: {
+    type: Sequelize.INTEGER,
+    allowNull: true
   }
 });
 
-module.exports = Address;
+Book.hasMany(LoansBook, {
+    foreignKey: 'bookId', 
+});
+LoansBook.belongsTo(Book);
+module.exports = Book;
