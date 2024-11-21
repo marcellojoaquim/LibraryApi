@@ -1,19 +1,33 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+require("dotenv").config();
 
 exports.signUp = async (req, res) => {
-  const {name, email, password} = req.body;
-  const newUser = new User({
-    name, email, password: await User.encryptPWD(password)
-  })
-  const savedUser = await newUser.save();
+    try {
+        const { name, email, password } = req.body;
+        const newUser = new User({
+            name,
+            email,
+            password: await User.encryptPWD(password),
+        });
+        const savedUser = await newUser.save();
 
-  const newToken = jwt.sign({id: savedUser._id}, 'secretKey', {
-    expiresIn: 60000
-  })
+        const secretKey = Buffer.from(process.env.SECRETE_KEY, "base64");
 
-  res.status(200).json({newToken})
-}
+
+        const newToken = jwt.sign(
+            {  name: savedUser.name, email: savedUser.email }, 
+            secretKey,
+            { expiresIn: "1h" } 
+        );
+
+        res.status(200).json({ token: newToken });
+    } catch (error) {
+        console.error("Erro ao criar usuário:", error);
+        res.status(500).json({ message: "Erro ao criar usuário" });
+    }
+};
+
 
 exports.logIn = async (req, res) => {
   const existsUser = await User.findOne({email: req.body.email});
@@ -26,11 +40,14 @@ exports.logIn = async (req, res) => {
     token: null,
     message: 'Invalid password'
   })
-  console.log(existsUser);
+  console.log("Login: ",existsUser);
+  const secretKey = Buffer.from(process.env.SECRETE_KEY, "base64");
 
-  const token = jwt.sign({id: existsUser._id}, 'secretKey', {
-    expiresIn: 60000
-  })
+  const token = jwt.sign(
+    { id: existsUser._id, name: existsUser.name, email: existsUser.email }, 
+    secretKey,
+    { expiresIn: "1h" } 
+);
 
 
   return res.json({
@@ -38,7 +55,7 @@ exports.logIn = async (req, res) => {
     name: existsUser._id,
     Address: existsUser.Address,
     message: 'Success',
-    token: token
+    token: {token}
   })
 
 }
