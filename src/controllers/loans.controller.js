@@ -1,5 +1,6 @@
 const LoansBook = require('../models/LoansBook')
 const bookCtrl = require('../controllers/book.controller');
+const Sequelize = require('sequelize')
 
 exports.find = async (req, res) =>{
     const loan = await LoansBook.findOne()
@@ -12,9 +13,28 @@ exports.find = async (req, res) =>{
 }
 
 exports.findAll = async(req, res) => {
-    const loans = await LoansBook.findAll({
-      raw: true
-    })
+    const current = req.query.current;
+
+    let loans;
+    
+    if(current === 'true') {
+      loans = await LoansBook.findAll({
+        raw: true,
+        where: {
+          dataInicio: {
+            [Sequelize.Op.lte]: new Date()
+          },
+          dataFinal: {
+            [Sequelize.Op.gte]: new Date()
+          }
+        }
+      }); 
+    }
+    else {
+      loans = await LoansBook.findAll({
+        raw: true
+      });
+    }
     
     if(loans){
       return res.status(200).json(loans);
