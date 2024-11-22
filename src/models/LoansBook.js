@@ -25,4 +25,17 @@ const LoansBook = db.define('loansBooks', {
     }
 })
 
+LoansBook.isAvailable = async (bookId, dataInicio) => {
+    const existingLoan = await LoansBook.findOne({
+      where: {
+        bookId: bookId,
+        dataFinal: {
+            [Sequelize.Op.gte]: dataInicio,
+        }
+      }
+    });
+
+    return existingLoan === null;
+}
+
 module.exports = LoansBook;

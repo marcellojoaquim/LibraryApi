@@ -15,11 +15,15 @@ exports.find = async(req, res) => {
 }
 
 exports.findAll = async(req, res) => {
-  const book = await Book.findAll({
-    raw: true
+  const sortField = req.query.sortBy || 'id';
+  const sortOrder = req.query.order || 'ASC';
+
+  const books = await Book.findAll({
+    raw: true,
+    order: [[sortField, sortOrder]]
   })
-  if(book){
-    return res.status(200).json(book);
+  if(books){
+    return res.status(200).json(books);
   } else {
     return res.status(404).json({message: 'Not found'});
   }
@@ -32,6 +36,7 @@ exports.create = async (req, res) => {
     book.autor = req.body.autor
     book.genero = req.body.genero
     book.anoPublicacao = req.body.anoPublicacao
+    book.count = 0
     book.save();
     return res.status(201).json(book);
   }else{
@@ -39,4 +44,20 @@ exports.create = async (req, res) => {
       message: 'Internal error'
     })
   }
+}
+
+exports.incrementCount = async (bookId) => {
+  const book = await Book.findOne({
+    where: {
+      id: bookId
+    }
+  });
+
+  if(!book) {
+    return;
+  }
+
+  book.count = book.count + 1;
+
+  book.save();
 }

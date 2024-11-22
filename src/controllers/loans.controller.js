@@ -1,4 +1,6 @@
 const LoansBook = require('../models/LoansBook')
+const bookCtrl = require('../controllers/book.controller');
+const Sequelize = require('sequelize')
 
 exports.find = async (req, res) =>{
     const loan = await LoansBook.findOne()
@@ -11,9 +13,28 @@ exports.find = async (req, res) =>{
 }
 
 exports.findAll = async(req, res) => {
-    const loans = await LoansBook.findAll({
-      raw: true
-    })
+    const current = req.query.current;
+
+    let loans;
+    
+    if(current === 'true') {
+      loans = await LoansBook.findAll({
+        raw: true,
+        where: {
+          dataInicio: {
+            [Sequelize.Op.lte]: new Date()
+          },
+          dataFinal: {
+            [Sequelize.Op.gte]: new Date()
+          }
+        }
+      }); 
+    }
+    else {
+      loans = await LoansBook.findAll({
+        raw: true
+      });
+    }
     
     if(loans){
       return res.status(200).json(loans);
@@ -23,15 +44,36 @@ exports.findAll = async(req, res) => {
 }
 
 exports.create = async (req, res) => {
+
+    // validations
+
+    const dataInicio = req.body.dataInicio;
+    const dataFinal = req.body.dataFinal;
+
+    if(dataInicio > dataFinal) {  
+      return res.status(400).json({ message: 'A data inicial deve ser anterior à data final' });
+    }
+
+    const isAvailable = await LoansBook.isAvailable(req.body.bookId, dataInicio);
+
+    if(!isAvailable) {
+      return res.status(409).json({ message: 'Este livro já está emprestado.' });
+    }
+
+    // persistence
+
     const loan = new LoansBook;
 
     loan.userId = req.body.userId;
     loan.bookId = req.body.bookId;
-    loan.type = req.body.type;
-    loan.dataInicio = req.body.dataInicio;
-    loan.dataFinal = req.body.dataFinal;
+    loan.dataInicio = dataInicio;
+    loan.dataFinal = dataFinal;
 
     loan.save();
+
+    // increment book count
+
+    bookCtrl.incrementCount(loan.bookId);
 
     return res.status(201).json(loan);
 }
