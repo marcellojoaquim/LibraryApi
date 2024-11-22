@@ -40,3 +40,19 @@ exports.create = async (req, res) => {
     })
   }
 }
+
+exports.incrementCount = async (bookId) => {
+  const book = await Book.findOne({
+    where: {
+      id: bookId
+    }
+  });
+
+  if(!book) {
+    return;
+  }
+
+  book.count = book.count + 1;
+
+  book.save();
+}

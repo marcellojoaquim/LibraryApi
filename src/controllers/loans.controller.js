@@ -1,4 +1,5 @@
 const LoansBook = require('../models/LoansBook')
+const bookCtrl = require('../controllers/book.controller');
 
 exports.find = async (req, res) =>{
     const loan = await LoansBook.findOne()
@@ -49,6 +50,10 @@ exports.create = async (req, res) => {
     loan.dataFinal = dataFinal;
 
     loan.save();
+
+    // increment book count
+
+    bookCtrl.incrementCount(loan.bookId);
 
     return res.status(201).json(loan);
 }
