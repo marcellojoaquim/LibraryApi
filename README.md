@@ -7,6 +7,10 @@ O LibraryApi é uma API RESTful para gerenciar livros, usuários e empréstimos 
 ```bash
 git clone https://github.com/seuusuario/LibraryApi.git
 cd LibraryApi
+
+execute o comando:
+    docker-compose up --build
+    estara rodando na porta 3000 a api em node e na 3306 o banco de dados.
 ```
 
 ## Pré-requisitos

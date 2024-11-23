@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const userCtrl = require('../controllers/user.controller');
-const authToken = require('../middleware/authToken');
 
-router.get('/find',authToken, userCtrl.find);
-router.put('/update/:id',authToken, userCtrl.update);
+router.get('/find', userCtrl.find);
+router.put('/update/:id', userCtrl.update);
   
 module.exports = router;
