@@ -1,0 +1,23 @@
+services:
+  node-server:
+    build: .
+    container_name: library-api
+    entrypoint: ./.docker/entrypoint.sh
+    volumes:
+      - .:/home/node/api
+      - /home/node/api/node_module
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api-library
+  database:
+    container_name: api-library
+    build: ./.docker/mysql
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./.docker/dbdata:/var/lib/mysql
+      - ./.docker/mysql:/docker-entrypoint-initdb.d
+    environment:
+      - MYSQL_DATABASE=library_api
+      - MYSQL_ROOT_PASSWORD=root
