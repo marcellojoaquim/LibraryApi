@@ -13,8 +13,8 @@ const LoansBook = db.define('loansBooks', {
         type: Sequelize.INTEGER.UNSIGNED,
     },
     bookId: {
-    type: Sequelize.INTEGER.UNSIGNED,
-  },
+        type: Sequelize.INTEGER.UNSIGNED,
+    },
     dataInicio: {
         type: Sequelize.DATE,
         allowNull: false

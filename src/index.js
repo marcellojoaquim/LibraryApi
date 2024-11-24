@@ -9,6 +9,7 @@ const Address = require('./models/Address');
 const Book = require('./models/Book');
 const User = require('./models/User');
 const LoansBook = require('./models/LoansBook');
+const morgan = require('morgan');
 const port = 3000;
 
 const app = express();
@@ -28,6 +29,7 @@ const app = express();
   await LoansBook.sync();
 })();
 
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({extended: false}));
 

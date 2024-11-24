@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root         # Configura a senha do root
+      MYSQL_DATABASE: library_api       # Nome do banco de dados principal
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  node_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: node_container
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+    env_file:
+      - .env
+    environment:
+      DB_HOST: mysql                    # O nome do serviço do MySQL
+      DB_PORT: 3306                     # Porta padrão do MySQL
+      DB_USER: root                     # Usuário root
+      DB_PASSWORD: root                 # Senha do root
+      DB_DATABASE: library_api          # Nome do banco de dados principal
+
+volumes:
+  mysql_data:

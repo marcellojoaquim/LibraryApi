@@ -4,7 +4,7 @@ const LoansBook = require('../models/LoansBook')
 const { where } = require('sequelize');
 
 exports.find = async (req, res) =>{
-  const user = await User.findOne({include:{model:Address}})
+  const user = await User.findAll({include:{model:Address}})
   return res.status(200).json(user)
 }
 
