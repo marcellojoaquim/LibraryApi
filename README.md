@@ -13,6 +13,12 @@ execute o comando:
     estara rodando na porta 3000 a api em node e na 3306 o banco de dados.
 ```
 
+## Como Executar os testes de Carga
+```bash
+execute o comando:
+    artillery run teste-carga.yml
+```
+
 ## Pré-requisitos
 - Node.js (versão 14 ou superior)
 - MySQL (versão 8 ou superior)

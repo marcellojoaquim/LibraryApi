@@ -16,7 +16,7 @@ exports.update = async (req, res) => {
     if(user != undefined){
       user.name = req.body.name
       user.email = req.body.email
-      user.password = req.body.password
+      user.password = User.encryptPWD(req.body.password)
       user.save();
       return res.status(200).json(user);
     }else{
